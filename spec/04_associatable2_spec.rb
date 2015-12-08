@@ -51,7 +51,6 @@ describe 'Associatable' do
 
       expect(Human.assoc_options).to have_key(:house)
       expect(Cat.assoc_options).to_not have_key(:house)
-    end
   end
 
   describe '#has_one_through' do
@@ -69,6 +68,7 @@ describe 'Associatable' do
       expect(cat).to respond_to(:home)
     end
 
+    end
     it 'fetches associated `home` for a `Cat`' do
       house = cat.home
 

@@ -12,7 +12,7 @@ class SQLObject
       SELECT
         *
       FROM
-        #{self.table_name}
+        #{ self.table_name }
     SQL
 
     results.first.map { |column_name| column_name.to_sym }
@@ -27,7 +27,7 @@ class SQLObject
         self.attributes[col_name]
       end
 
-      define_method("#{col_name}=") do |new_col_name|
+      define_method("#{ col_name }=") do |new_col_name|
         self.attributes[col_name] = new_col_name
       end
 
@@ -48,7 +48,7 @@ class SQLObject
       SELECT
         *
       FROM
-        #{self.table_name}
+        #{ self.table_name }
     SQL
 
     results.shift
@@ -79,7 +79,7 @@ class SQLObject
       SELECT
         *
       FROM
-        #{self.table_name}
+        #{ self.table_name }
       WHERE
         id = ?
     SQL
@@ -93,9 +93,9 @@ class SQLObject
     params.each do |attr, val|
       attr = attr.to_sym
       if self.class.columns.include?(attr)
-        self.send("#{attr}=", val)
+        self.send("#{ attr }=", val)
       else
-        raise "unknown attribute '#{attr}'"
+        raise "unknown attribute '#{ attr }'"
       end
     end
 
@@ -119,14 +119,14 @@ class SQLObject
     end
 
     question_marks = question_marks.join(",")
-    question_marks = "(#{question_marks})"
-    insert = "#{self.class.table_name} (#{col_names})"
+    question_marks = "(#{ question_marks })"
+    insert = "#{ self.class.table_name } (#{ col_names })"
 
     DBConnection.execute(<<-SQL, *attribute_values)
       INSERT INTO
-        #{insert}
+        #{ insert }
       VALUES
-        #{question_marks}
+        #{ question_marks }
     SQL
     self.id = DBConnection.last_insert_row_id
 
@@ -138,15 +138,15 @@ class SQLObject
     col_names = self.class.columns
 
     col_names.each do |cname|
-      set << "#{cname} = ?, "
+      set << "#{ cname } = ?, "
     end
     set = set.chomp(', ')
 
     result = DBConnection.execute(<<-SQL, attribute_values, self.id)
       UPDATE
-        #{self.class.table_name}
+        #{ self.class.table_name }
       SET
-        #{set}
+        #{ set }
       WHERE
         id = ?
     SQL
